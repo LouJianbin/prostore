@@ -70,3 +70,33 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.wrapper {
+  @apply mx-auto max-w-screen-xl p-4 flex items-center;
+}
+@screen sm {
+  .wrapper {
+    @apply px-6;
+  }
+}
+@screen md {
+  .wrapper {
+    @apply px-8;
+  }
+}
+@screen lg {
+  .wrapper {
+    @apply px-10;
+  }
+}
+@screen xl {
+  .wrapper {
+    @apply px-0;
+  }
+}
+.flex-start {
+  @apply flex items-start;
+}
+.flex-center {
+  @apply flex items-center justify-center;
+}
