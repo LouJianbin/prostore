@@ -1,4 +1,4 @@
 
 export default function Home() {
-  return <>Prostore</>;
+  return <><span className=" text-orange-500">Prostore</span></>;
 }
