@@ -6,6 +6,33 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.wrapper {
+  @apply max-w-7xl lg:mx-auto p-5 md:px-10 w-full;
+}
+
+.flex-start {
+  @apply flex justify-start items-center;
+}
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.h1-bold {
+  @apply font-bold text-3xl lg:text-4xl;
+}
+
+.h2-bold {
+  @apply font-bold text-2xl lg:text-3xl;
+}
+
+.h3-bold {
+  @apply font-bold text-xl lg:text-2xl;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -63,41 +90,9 @@ body {
   }
 }
 
+
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.wrapper {
-  @apply mx-auto max-w-screen-xl p-4 flex items-center;
-}
-@screen sm {
-  .wrapper {
-    @apply px-6;
-  }
-}
-@screen md {
-  .wrapper {
-    @apply px-8;
-  }
-}
-@screen lg {
-  .wrapper {
-    @apply px-10;
-  }
-}
-@screen xl {
-  .wrapper {
-    @apply px-0;
-  }
-}
-.flex-start {
-  @apply flex items-start;
-}
-.flex-center {
-  @apply flex items-center justify-center;
 }

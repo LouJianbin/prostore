@@ -6,11 +6,11 @@ import Menu from "./menu";
 const Header = () => {
   return (
     <header className="w-full border-b">
-      <div className="wrapper justify-between">
-        <div>
-          <Link href="/" className="flex items-center">
+      <div className="wrapper flex-between">
+        <div className="flex-start">
+          <Link href="/" className="flex-start">
             <Image
-              src="/globe.svg"
+              src="/images/logo.svg"
               alt={APP_NAME}
               height={48}
               width={48}
