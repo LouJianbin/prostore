@@ -1,7 +1,14 @@
-export default async function Home() {
+import ProductList from "@/components/shared/product/product-list";
+import sampleData from "@/db/sample-data";
+
+export default async function HomePage() {
   return (
     <>
-      <span className=" text-orange-500">Prostore</span>
+      <ProductList
+        data={sampleData.products}
+        title="Newest Arrivals"
+        limit={4}
+      ></ProductList>
     </>
   );
 }
