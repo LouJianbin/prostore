@@ -29,6 +29,7 @@ const ModeToggle = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
+          aria-label="Toggle theme"
           variant="ghost"
           className="focus-visible:ring-0 focus-visible:ring-offset-0"
         >
