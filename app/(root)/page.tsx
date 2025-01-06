@@ -6,11 +6,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <ProductList
-        data={latestProducts}
-        title="Newest Arrivals"
-        limit={4}
-      ></ProductList>
+        <ProductList
+          data={latestProducts}
+          title="Newest Arrivals"
+          limit={4}
+        ></ProductList>
     </>
   );
 }
