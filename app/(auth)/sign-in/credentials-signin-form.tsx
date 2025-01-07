@@ -3,11 +3,26 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInWithCredentials } from "@/lib/actions/user.actions";
 import Link from "next/link";
+import { useActionState } from "react";
 
 const CredentialsSignInForm = () => {
+  const [error, submitAction, isPending] = useActionState(
+    signInWithCredentials,
+    null
+  );
+
+  const SignInButton = () => {
+    return (
+      <Button disabled={isPending} className="w-full" variant="default">
+        {isPending ? "Signing In..." : "Sign In"}
+      </Button>
+    );
+  };
+
   return (
-    <form>
+    <form action={submitAction}>
       <div className="space-y-6">
         <div>
           <Label htmlFor="email">Email</Label>
@@ -30,10 +45,13 @@ const CredentialsSignInForm = () => {
           ></Input>
         </div>
         <div>
-          <Button className="w-full" variant="default">
-            Sign In
-          </Button>
+          <SignInButton></SignInButton>
         </div>
+
+        {error && !error.success && (
+          <div className="text-center text-destructive">{error.message}</div>
+        )}
+
         <div className="text-sm text-center text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link href="/sign-up" target="_self" className="underline">
