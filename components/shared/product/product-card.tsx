@@ -28,7 +28,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           {product.stock > 0 ? (
             <ProductPrice value={Number(product.price)}></ProductPrice>
           ) : (
-            <p className="text-destructive">Out of Stock</p>
+            <p className="text-red-700">Out of Stock</p>
           )}
         </div>
       </CardContent>
