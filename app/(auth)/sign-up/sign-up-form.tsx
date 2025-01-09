@@ -9,10 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 
 const SignUpForm = () => {
-  const [error, submitAction, isPending] = useActionState(
-    signUpUser,
-    null
-  );
+  const [error, submitAction, isPending] = useActionState(signUpUser, null);
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
