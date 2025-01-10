@@ -5,6 +5,7 @@ import { prisma } from "./db/prisma";
 
 import type { Provider } from "next-auth/providers";
 import { compareSync } from "bcrypt-ts-edge";
+import { NextResponse } from "next/server";
 
 const providers: Provider[] = [
   Credentials({
@@ -87,6 +88,30 @@ const config: NextAuthConfig = {
       }
 
       return session;
+    },
+    authorized({ request }) {
+      // Check for session cart cookie
+      if (!request.cookies.get("sessionCartId")) {
+        // Generate new session cart id cookie
+        const sessionCartId = crypto.randomUUID();
+
+        // Clone the req headers
+        const newRequestHeaders = new Headers(request.headers);
+
+        // Create new response and add the new headers
+        const response = NextResponse.next({
+          request: {
+            headers: newRequestHeaders,
+          },
+        });
+
+        // Set newly generated sessionCartId in the response cookies
+        response.cookies.set("sessionCartId", sessionCartId);
+
+        return response;
+      }
+
+      return true;
     },
   },
   adapter: PrismaAdapter(prisma),
