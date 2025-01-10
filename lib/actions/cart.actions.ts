@@ -1,8 +1,60 @@
 "use server";
 
 import { CartItem } from "@/types";
+import { convertToPlainObject, formatErrors } from "../utils";
+import { cookies } from "next/headers";
+import { auth } from "@/auth";
+import { prisma } from "@/db/prisma";
+import { cartItemSchema } from "../validators";
 
 export async function addItemToCart(data: CartItem) {
-  // Add product to cart
-  return { success: true, meassge: "Item added to cart" };
+  try {
+    // Check for cart cookie
+    const sessionCartId = (await cookies()).get("sessionCartId")?.value;
+
+    // Get session and user ID
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    // Get cart
+    const cart = await getMyCart();
+
+    // Parse an validate item
+    const item = cartItemSchema.parse(data);
+
+    // Find product in database
+    const product = await prisma.product.findUnique({
+      where: { id: item.productId },
+    });
+
+    return { success: true, message: "Item added to cart" };
+  } catch (error) {
+    return { success: false, message: formatErrors(error) };
+  }
+}
+
+export async function getMyCart() {
+  // Check for cart cookie
+  const sessionCartId = (await cookies()).get("sessionCartId")?.value;
+
+  // Get session and user ID
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  // Get user cart from database
+  const cart = await prisma.cart.findFirst({
+    where: userId ? { userId } : { sessionCartId },
+  });
+
+  if (!cart) return undefined;
+
+  // Convert decimals and return
+  return convertToPlainObject({
+    ...cart,
+    items: cart.items,
+    itemsPrice: cart.itemsPrice.toString(),
+    totalPrice: cart.totalPrice.toString(),
+    shippingPrice: cart.shippingPrice.toString(),
+    taxPrice: cart.taxPrice.toString(),
+  });
 }

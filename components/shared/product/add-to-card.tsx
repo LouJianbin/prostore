@@ -17,7 +17,7 @@ const AddToCart = ({ item }: { item: CartItem }) => {
     if (!res.success) {
       toast({
         variant: "destructive",
-        description: res.meassge,
+        description: res.message,
       });
       return;
     }
@@ -40,7 +40,11 @@ const AddToCart = ({ item }: { item: CartItem }) => {
   };
 
   return (
-    <Button className="w-full" type="button" onClick={handleAddToCart}>
+    <Button
+      className="w-full"
+      type="button"
+      onClick={handleAddToCart}
+    >
       <Plus></Plus> Add To Cart
     </Button>
   );
