@@ -135,7 +135,7 @@ export async function getMyCart() {
   // Convert decimals and return
   return convertToPlainObject({
     ...cart,
-    items: cart.items,
+    items: cart.items as CartItem[],
     itemsPrice: cart.itemsPrice.toString(),
     totalPrice: cart.totalPrice.toString(),
     shippingPrice: cart.shippingPrice.toString(),
