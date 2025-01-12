@@ -44,3 +44,14 @@ export async function formatErrors(error: any) {
     ? error.message
     : JSON.stringify(error.message);
 }
+
+// Round number to 2 decimal places
+export function round2(value: number | string) {
+  if (typeof value === "number") {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
+  if (typeof value === "string") {
+    return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+  }
+  throw new Error("Value is not a number or string");
+}
