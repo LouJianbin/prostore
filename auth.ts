@@ -115,6 +115,7 @@ const config: NextAuthConfig = {
     },
   },
   adapter: PrismaAdapter(prisma),
+  trustHost: true,
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth(config);
