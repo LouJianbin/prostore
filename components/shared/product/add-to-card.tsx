@@ -24,7 +24,7 @@ const AddToCart = ({ item }: { item: CartItem }) => {
 
     // Handle success add to cart
     toast({
-      description: `${item.name} added to cart`,
+      description: res.message,
       action: (
         <ToastAction
           className="bg-primary text-white hover:bg-gray-800"
@@ -40,11 +40,7 @@ const AddToCart = ({ item }: { item: CartItem }) => {
   };
 
   return (
-    <Button
-      className="w-full"
-      type="button"
-      onClick={handleAddToCart}
-    >
+    <Button className="w-full" type="button" onClick={handleAddToCart}>
       <Plus></Plus> Add To Cart
     </Button>
   );
