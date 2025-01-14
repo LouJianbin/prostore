@@ -4,7 +4,7 @@ CREATE TABLE "Order" (
     "userId" UUID NOT NULL,
     "shippingAddress" JSON NOT NULL,
     "paymentMethod" TEXT NOT NULL,
-    "paymentResult" JSON NOT NULL,
+    "paymentResult" JSON,
     "itemsPrice" DECIMAL(12,2) NOT NULL,
     "shippingPrice" DECIMAL(12,2) NOT NULL,
     "taxPrice" DECIMAL(12,2) NOT NULL,
