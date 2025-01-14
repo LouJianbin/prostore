@@ -80,7 +80,7 @@ export function formatId(id: string) {
 }
 
 // Format date and times
-export const formatDate = (dateString: Date) => {
+export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     year: "numeric",
