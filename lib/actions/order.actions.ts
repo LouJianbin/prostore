@@ -10,6 +10,7 @@ import { prisma } from "@/db/prisma";
 import { CartItem, PaymentResult } from "@/types";
 import { paypal } from "../paypal";
 import { revalidatePath } from "next/cache";
+import alipay from "../alipay";
 
 // Create order and create the order items
 export async function createOrder() {
@@ -201,6 +202,81 @@ export async function approvePayPalOrder(
       success: true,
       message: "Your order has been paid",
     };
+  } catch (error) {
+    return { success: false, message: formatErrors(error) };
+  }
+}
+
+// Create new alipay order
+export async function createAlipayUrl(orderId: string) {
+  try {
+    // Get order from database
+    const order = await prisma.order.findFirst({
+      where: { id: orderId },
+    });
+
+    if (order) {
+      // Create alipay order
+      const alipayUrl = await alipay.createUrl(
+        orderId,
+        Number(order.totalPrice)
+      );
+
+      return {
+        success: true,
+        message: "alipay url created successfully",
+        data: alipayUrl,
+      };
+    } else {
+      throw new Error("Order not found");
+    }
+  } catch (error) {
+    return { success: false, message: formatErrors(error) };
+  }
+}
+
+export async function queryAlipayOrder(orderId: string) {
+  try {
+    // Get order from database
+    const order = await prisma.order.findFirst({
+      where: { id: orderId },
+    });
+
+    if (order) {
+      // Create alipay order
+      const alipayOrder = await alipay.queryOrder(orderId);
+
+      return {
+        success: true,
+        message: "alipay order query successfully",
+        data: alipayOrder,
+      };
+    } else {
+      throw new Error("Order not found");
+    }
+  } catch (error) {
+    return { success: false, message: formatErrors(error) };
+  }
+}
+
+export async function approveAlipayOrder(orderId: string) {
+  try {
+    const alipayOrder = await queryAlipayOrder(orderId);
+
+    if (!alipayOrder.success) throw new Error("Error in alipay payment");
+
+    if (alipayOrder.data?.tradeStatus === "TRADE_SUCCESS") {
+      // Update order to paid
+      await updateOrderToPaid({
+        orderId,
+        paymentResult: {
+          id: alipayOrder.data.tradeNo,
+          status: alipayOrder.data.tradeStatus,
+          email_address: "",
+          pricePaid: alipayOrder.data.totalAmount,
+        },
+      });
+    }
   } catch (error) {
     return { success: false, message: formatErrors(error) };
   }

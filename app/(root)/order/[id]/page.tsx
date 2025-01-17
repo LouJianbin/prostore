@@ -1,4 +1,4 @@
-import { getOrderById } from "@/lib/actions/order.actions";
+import { approveAlipayOrder, getOrderById } from "@/lib/actions/order.actions";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OrderDetailsTable from "./order-details-table";
@@ -17,6 +17,10 @@ const OrderDetailPage = async ({
 
   const order = await getOrderById(id);
   if (!order) notFound();
+
+  if (order.paymentMethod === "Alipay") {
+    await approveAlipayOrder(order.id);
+  }
 
   return (
     <>

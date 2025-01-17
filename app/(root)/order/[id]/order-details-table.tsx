@@ -20,9 +20,12 @@ import {
 } from "@paypal/react-paypal-js";
 import {
   approvePayPalOrder,
+  createAlipayUrl,
   createPayPalOrder,
+  queryAlipayOrder,
 } from "@/lib/actions/order.actions";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 const OrderDetailsTable = ({
   order,
@@ -79,6 +82,20 @@ const OrderDetailsTable = ({
       variant: res.success ? "default" : "destructive",
       description: res.message,
     });
+  };
+
+  const handleCreateAlipayOrder = async () => {
+    const res = await createAlipayUrl(order.id);
+
+    if (res.data) {
+      window.location.href = res.data;
+    }
+  };
+
+  const handleQueryAlipayOrder = async () => {
+    const res = await queryAlipayOrder(order.id);
+
+    console.log(res);
   };
 
   return (
@@ -185,6 +202,16 @@ const OrderDetailsTable = ({
                     onApprove={handleApprovePayPalOrder}
                   />
                 </PayPalScriptProvider>
+              </div>
+            )}
+            {!isPaid && paymentMethod == "Alipay" && (
+              <div className="space-y-1">
+                <Button className="w-full" onClick={handleCreateAlipayOrder}>
+                  Alipay
+                </Button>
+                <Button className="w-full" onClick={handleQueryAlipayOrder}>
+                  Query Order
+                </Button>
               </div>
             )}
           </CardContent>
