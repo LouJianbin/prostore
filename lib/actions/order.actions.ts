@@ -339,7 +339,7 @@ async function updateOrderToPaid({
 }
 
 // Get user's orders
-export async function getMyorders({
+export async function getMyOrders({
   limit = PAGE_SIZE,
   page,
 }: {
