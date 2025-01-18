@@ -402,7 +402,7 @@ export async function getOrderSummary() {
     ordersCount,
     productsCount,
     usersCount,
-    totalSales: totalSales._sum.totalPrice,
+    totalSales,
     salesData,
     latestSales,
   };
