@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OrderDetailsTable from "./order-details-table";
 import { ShippingAddress } from "@/types";
+import { auth } from "@/auth";
+import { Role } from "@prisma/client";
 
 export const metadata: Metadata = {
   title: "Order Details",
@@ -18,6 +20,8 @@ const OrderDetailPage = async ({
   const order = await getOrderById(id);
   if (!order) notFound();
 
+  const session = await auth();
+
   if (order.paymentMethod === "Alipay") {
     await approveAlipayOrder(order.id);
   }
@@ -30,6 +34,7 @@ const OrderDetailPage = async ({
           shippingAddress: order.shippingAddress as ShippingAddress,
         }}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
+        isAdmin={session?.user.role === Role.admin || false}
       ></OrderDetailsTable>
     </>
   );

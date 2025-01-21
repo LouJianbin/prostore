@@ -22,17 +22,22 @@ import {
   approvePayPalOrder,
   createAlipayUrl,
   createPayPalOrder,
+  deliverOrder,
   queryAlipayOrder,
+  updateOrderToPaidCOD,
 } from "@/lib/actions/order.actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { useTransition } from "react";
 
 const OrderDetailsTable = ({
   order,
   paypalClientId,
+  isAdmin,
 }: {
   order: Order;
   paypalClientId: string;
+  isAdmin: boolean;
 }) => {
   const {
     shippingAddress,
@@ -98,6 +103,54 @@ const OrderDetailsTable = ({
     console.log(res);
   };
 
+  // Button to mark order as paid
+  const MarkAsPaidButton = () => {
+    const [isPending, startTransition] = useTransition();
+    const { toast } = useToast();
+
+    return (
+      <Button
+        type="button"
+        disabled={isPending}
+        onClick={() =>
+          startTransition(async () => {
+            const res = await updateOrderToPaidCOD(order.id);
+            toast({
+              variant: res.success ? "default" : "destructive",
+              description: res.message,
+            });
+          })
+        }
+      >
+        {isPending ? "processing..." : "Mark As Paid"}
+      </Button>
+    );
+  };
+
+  // Button to mark order as delivered
+  const MarkAsDeliveredButton = () => {
+    const [isPending, startTransition] = useTransition();
+    const { toast } = useToast();
+
+    return (
+      <Button
+        type="button"
+        disabled={isPending}
+        onClick={() =>
+          startTransition(async () => {
+            const res = await deliverOrder(order.id);
+            toast({
+              variant: res.success ? "default" : "destructive",
+              description: res.message,
+            });
+          })
+        }
+      >
+        {isPending ? "processing..." : "Mark As Delivered"}
+      </Button>
+    );
+  };
+
   return (
     <>
       <h1 className="py-4 text-2xl">Order {formatId(order.id)}</h1>
@@ -126,7 +179,7 @@ const OrderDetailsTable = ({
               </p>
               {isDelivered ? (
                 <Badge variant="secondary">
-                  Paid at {formatDateTime(deliveredAt!).dateTime}
+                  Delivered at {formatDateTime(deliveredAt!).dateTime}
                 </Badge>
               ) : (
                 <Badge variant="destructive">Not delivered</Badge>
@@ -213,6 +266,14 @@ const OrderDetailsTable = ({
                   Query Order
                 </Button>
               </div>
+            )}
+
+            {/* Cash On Deliver */}
+            {isAdmin && !isPaid && paymentMethod === "CashOnDelivery" && (
+              <MarkAsPaidButton></MarkAsPaidButton>
+            )}
+            {isAdmin && isPaid && !isDelivered && (
+              <MarkAsDeliveredButton></MarkAsDeliveredButton>
             )}
           </CardContent>
         </Card>
