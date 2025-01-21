@@ -14,6 +14,7 @@ import { Role } from "@prisma/client";
 import { BadgeDollarSign, Barcode, CreditCard, Users } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import Charts from "./charts";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -83,11 +84,17 @@ const AdminOverviewPage = async () => {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
-          <CardHeader>Overview</CardHeader>
-          <CardContent>{/* CHART HERE */}</CardContent>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Charts data={{ salesData: summary.salesData }}></Charts>
+          </CardContent>
         </Card>
         <Card className="col-span-3">
-          <CardHeader>Recent Sales</CardHeader>
+          <CardHeader>
+            <CardTitle>Recent Sales</CardTitle>
+          </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
