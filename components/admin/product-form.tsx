@@ -24,6 +24,7 @@ import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { UploadButton } from "@/lib/uploadthing";
+import { Checkbox } from "../ui/checkbox";
 
 const ProductForm = ({
   type,
@@ -80,6 +81,8 @@ const ProductForm = ({
   };
 
   const images = form.watch("images");
+  const isFeatured = form.watch("isFeatured");
+  const banner = form.watch("banner");
 
   return (
     <Form {...form}>
@@ -277,7 +280,53 @@ const ProductForm = ({
             )}
           ></FormField>
         </div>
-        <div className="upload-field">{/* isFeatured */}</div>
+        <div className="upload-field">
+          {/* isFeatured */}
+          Featured Product
+          <Card>
+            <CardContent className="space-y-2 mt-2">
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem className="space-x-2 items-center">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      ></Checkbox>
+                    </FormControl>
+                    <FormLabel>Is Featured?</FormLabel>
+                  </FormItem>
+                )}
+              ></FormField>
+              {isFeatured && banner && (
+                <Image
+                  src={banner}
+                  alt="banner image"
+                  className="w-full object-cover object-center rounded-sm"
+                  width={1920}
+                  height={68}
+                ></Image>
+              )}
+
+              {isFeatured && !banner && (
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res: { url: string }[]) => {
+                    form.setValue("banner", res[0].url);
+                  }}
+                  onUploadError={(error: Error) => {
+                    toast({
+                      variant: "destructive",
+                      description: `ERROR! ${error.message}`,
+                    });
+                  }}
+                ></UploadButton>
+              )}
+            </CardContent>
+          </Card>
+        </div>
         <div>
           {/* Descirption */}
           <FormField
