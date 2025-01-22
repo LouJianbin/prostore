@@ -1,4 +1,5 @@
 import { ShippingAddress } from "@/types";
+import { Role } from "@prisma/client";
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Prostore";
 export const APP_DESCRIPTION =
@@ -39,3 +40,8 @@ export const productDefaultValues = {
   isFeatured: false,
   banner: null,
 };
+
+export const USER_ROLES = process.env.USER_ROLES?.split(",") || [
+  Role.admin,
+  Role.user,
+];
