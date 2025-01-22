@@ -16,11 +16,11 @@ const CategoryDrawer = async () => {
 
   return (
     <Drawer direction="left">
-      <DrawerTrigger>
-        <Button variant="outline">
+      <Button variant="outline" asChild>
+        <DrawerTrigger>
           <MenuIcon></MenuIcon>
-        </Button>
-      </DrawerTrigger>
+        </DrawerTrigger>
+      </Button>
       <DrawerContent className="h-full max-w-sm">
         <DrawerHeader>
           <DrawerTitle>Select a category</DrawerTitle>
