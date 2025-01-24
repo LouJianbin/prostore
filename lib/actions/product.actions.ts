@@ -91,15 +91,22 @@ export async function getAllProducts({
       : {};
 
   const data = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-    skip: (page - 1) * limit,
-    take: limit,
     where: {
       ...queryFilter,
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
     },
+    orderBy:
+      sort === "lowest"
+        ? { price: "asc" }
+        : sort === "highest"
+        ? { price: "desc" }
+        : sort === "rating"
+        ? { rating: "desc" }
+        : { createdAt: "desc" },
+    skip: (page - 1) * limit,
+    take: limit,
   });
 
   const dataCount = await prisma.product.count();
